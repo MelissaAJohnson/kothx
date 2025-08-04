@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  </head>
+
+  <body>
+    <h3><%= NflTeam.where(short_city: @pick.nfl_team).last.full_name %></h3>
+  </body>
+</html>

@@ -1,0 +1,20 @@
+<div class = 'container'>
+  <h2>Edit Pick for <%= Team.where(id: @pick.team_id).last.name %></h2>
+  <h4>NFL Week <%= @pick.nfl_week %></h4>
+  Current pick: <%= NflTeam.where(short_city: @pick.nfl_team).last.full_name %><br /><br />
+
+  <% if DateTime.current <= deadline || !current_user.member? %>
+    <%= form_for [@pick.team, @pick] do |f| %>
+      <div class = 'form-group'>
+        <%= f.select(:nfl_team, nfl_teams_for_edit, {:include_blank => "Select new team"}, {class: 'form-control'}) %>
+        <br />
+        <%= f.submit "Update", class: 'btn btn-success' %>&nbsp;&nbsp;<%= link_to "Cancel", root_url %>
+      </div>
+    <% end %>
+  <% else %>
+    <div class="alert alert-info">
+      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+      Picks not editable after deadline.
+    </div>
+  <% end %>
+</div>

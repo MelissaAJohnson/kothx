@@ -65,3 +65,7 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+gem "devise"
+gem 'orm_adapter', '~> 0.5'
+gem 'audited'

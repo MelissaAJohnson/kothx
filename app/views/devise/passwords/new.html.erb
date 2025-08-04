@@ -1,0 +1,36 @@
+<div class = 'container'>
+  <%= link_to 'King of the Hill', root_url, style: "font-size: 250%; color:black; text-decoration: none;" %>
+  <hr />
+  <br />
+
+  <div class = 'container'>
+    <%= devise_error_messages! %>
+    <div class = 'col-md-6 col-md-offset-3'>
+      <div class = 'panel panel-default'>
+        <div class = 'panel-heading'>
+          <center><h2>Forgot your password?</h2></center>
+        </div>
+        <br />
+        <div class = 'panel-body'>
+          <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+
+            <div class: 'form-group'>
+              <%= f.label :email, class: 'col-sm-2 control-label' %>
+              <div class = 'col-sm-10'>
+                <%= f.email_field :email, autofocus: true, class: 'form-control', placeholder: 'Email' %><br /><br />
+              </div>
+            </div>
+
+            <br /><br />
+
+            <div class="actions">
+              <center><%= f.submit "Send me reset password instructions", class: 'btn btn-primary' %></center>
+            </div>
+          <% end %>
+          <br />
+          <center><%= render "devise/shared/links" %></center>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

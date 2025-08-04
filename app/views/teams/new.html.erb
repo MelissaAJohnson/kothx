@@ -1,0 +1,29 @@
+<% if DateTime.current < '2024-09-09 05:00' || current_user.admin? || current_user.manager? %>
+  <div class = 'container'>
+    <h3>Name Your Team</h3>
+    <%= form_for @team do |f| %>
+      <% if @team.errors.any? %>
+        <div class = "alert alert-danger alert-dismissible" >
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <% @team.errors.full_messages.each do |message| %>
+            <%= message %>
+          <% end %>
+        </div>
+      <% end %>
+
+      <div class = 'form-group'>
+        <br />
+        <p>Enter your first and last name for your team name. Your team name is used to identify you in the standings. If you have multiple teams, add a number to the end of the team name (e.g. 'John Doe 1', 'John Doe 2').</p>
+        <%= f.text_field :name, class: 'form-control', placeholder: 'Team Name' %>
+        <br />
+        <%= f.submit 'Save', class: 'btn btn-primary' %>&nbsp;&nbsp;<%= link_to 'Cancel', :back %>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+   <script type="text/javascript">
+    window.location.href="/"
+  </script>
+<% end %>

@@ -1,0 +1,5 @@
+Pick by <%= @team.name %>
+
+<%= NflTeam.where(short_city: @pick.nfl_team).last.full_name %>
+
+View pick listing <%= root_url %>

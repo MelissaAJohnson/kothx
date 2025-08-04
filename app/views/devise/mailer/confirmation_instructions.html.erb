@@ -1,0 +1,5 @@
+<p>Welcome to Zimmer's KOTH league, <%= @email %>!</p>
+
+<p>Once you confirm your account email through the link below you will be able to log into the site.</p>
+
+<p><%= link_to 'Confirm my account', confirmation_url(@resource, confirmation_token: @token) %></p>

@@ -1,0 +1,88 @@
+<div class = 'container'>
+  <%= link_to 'King of the Hill', root_url, style: "font-size: 250%; color:black; text-decoration: none;" %>
+  <hr />
+  <br />
+  <div class = 'container'>
+    <%= devise_error_messages! %>
+    <div class="flash">
+      <% if flash[:notice] %>
+        <div class="alert alert-success">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <%= flash[:notice] %>
+        </div>
+      <% elsif flash.now[:alert] %>
+        <div class="alert alert-danger">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <%= flash.now[:alert] %>
+        </div>
+      <% elsif flash[:alert] %>
+        <div class="alert alert-warning">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <%= flash[:alert] %>
+        </div>
+      <% end %>
+    </div>
+
+    <div class = 'col-md-6 col-md-offset-3'>
+      <div class = 'panel panel-default' >
+        <div class = 'panel-heading'>
+          <center><h2>Sign Up</h2></center>
+        </div>
+        <div class = 'panel-body'>
+          <strong><span style = "font-size: 16px"><center>After completing this form, you will be redirected to the log-in page. You can log in after you click on the link in the confirmation email that will be sent. ** NOTE: It can take up to 24 hours to receive your confirmation.</center></span></strong><br /><br>
+          <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+
+          <div class="form-group">
+            <%= f.label :first_name, class: 'col-sm-4 control-label' %>
+            <div class = 'col-sm-8'>
+              <%= f.text_field :first_name, autofocus: true, class: 'form-control', placeholder: 'First Name' %>
+            </div><br />
+          </div><br />
+
+          <div class="form-group">
+            <%= f.label :last_name, class: 'col-sm-4 control-label' %>
+            <div class = 'col-sm-8'>
+              <%= f.text_field :last_name, class: 'form-control', placeholder: 'Last Name' %>
+            </div><br />
+          </div><br />
+
+            <div class="form-group">
+              <%= f.label :email, class: 'col-sm-4 control-label' %>
+              <div class = 'col-sm-8'>
+                <%= f.email_field :email, class: 'form-control', placeholder: 'Email Address' %>
+              </div><br />
+            </div><br />
+
+            <div class="form-group">
+              <%= f.label :password, class: 'col-sm-4 control-label' %>
+              <div class = 'col-sm-8'>
+                <%= f.password_field :password, autocomplete: "off", class: 'form-control', placeholder: 'Password' %>&nbsp;
+                <% if @minimum_password_length %>
+                  <%= @minimum_password_length %> characters minimum
+                <% end %>
+              </div>
+            </div><br />
+
+            <br /><br />
+
+            <div class="form-group">
+              <%= f.label :password_confirmation, class: 'col-sm-4 control-label' %>
+              <div class = 'col-sm-8'>
+                <%= f.password_field :password_confirmation, autocomplete: "off", class: 'form-control', placeholder: 'Confirm Password' %>
+              </div>
+            </div>
+
+           
+
+            <div class="actions">
+              <br /><br />
+              <center><%= f.submit "Sign up", class: 'btn btn-primary' %></center>
+            </div>
+            <br />
+            <p style = 'text-align: center'>Already have an account? <%= render "devise/shared/links" %></p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

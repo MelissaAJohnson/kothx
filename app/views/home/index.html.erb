@@ -1,0 +1,148 @@
+<div class = 'tab-pane active' id = 'home'>
+  <div class = 'container'>
+    <span style = 'font-size:20pt' = ''><strong>Zimmer League</strong></span>
+    <% if !NflWeek.first.has_started? %>
+      <br /><br />
+      <center>
+        <!-- <img src='/images/football_season.jpg' class = 'responsive' style = 'max-width: 500px'> -->
+        <h1>2024 Season Starting Soon</h1>
+      </center>
+        <% if current_user.teams.any? %>
+          <center><p>You have the following teams enrolled in the upcoming season.</p>
+            <% @current_user.teams.each do |team| %>
+              <%= link_to team.name, team %><br />
+            <% end %>
+            <br /><br />
+            <%= link_to '+ Add Another Team', new_team_path, :class => 'btn btn-primary' %>
+          </center>
+        <% else %>
+          <center>
+            <p>Get ready by adding your team now.</p>
+            <%= link_to '+ Add Team', new_team_path, :class => 'btn btn-primary' %>
+          </center>
+        <% end %>
+      
+    <% else %>
+      <% if current_user.teams.any? || current_user.admin? %>
+        <!-- <div class="alert alert-success">
+          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+          <strong>You can now pay online!</strong> We've implemented payment support through PayPal. If you'd like to pay online, click the Pay Now button and a new tab will open that allows you to either pay via a credit card or your PayPal account. Please note, the payment will appear as Upside Down Studios on your statement and you will be charged $10.61. The extra $0.61 is a fee that PayPal charges for transaction processing. You can still pay in person. See the FAQ for details.
+        </div> -->
+
+        <!-- BUSINESS RULE: members can only add teams up to when first game played -->
+        <% if DateTime.current < '2024-09-08 05:00' || current_user.admin? || current_user.manager? %>
+          &nbsp;&nbsp;<%= link_to "+ Add Team", new_team_path %>
+        <% end %>
+
+      
+        <br />
+        <br />
+        <div class = 'col-md-4' style = "border:1px solid grey;">
+          <h3><center><%= @teams.count %></center></h3>
+          <strong><center>TOTAL NUMBER OF TEAMS</center></strong>
+          <center>That's <span style = "color:green"><%= "$#{@teams.count * 10}" %> </span>up for grabs!</center><br />
+        </div>
+        <div class = 'col-md-4' style = "border:1px solid grey;">
+          <h3><center><%= "$#{split_pot}" %></center></h3>
+          <strong><center>WINNINGS PER TEAM</center></strong>
+          <center>If the game were to end today</center><br />
+        </div>
+        <div class = 'col-md-4' style = "border:1px solid grey;">
+          <h3><center><%= surviving_teams %></center></h3>
+          <strong><center>NUMBER OF SURVIVING TEAMS</center></strong>
+          <center><%= percent_survivors %> teams remain</center><br />
+        </div>
+        <!-- <div class = 'col-md-3' style = "border:1px solid grey;">
+          <h3><center><%= no_loss_teams %></center></h3>
+          <strong><center>TEAMS WITH NO LOSSES</center></strong>
+          <center><%= percent_no_losers %> of remaining teams have no losses<br /><br />
+        </div> -->
+
+        <div id="Make Pick">
+          <br />&nbsp;&nbsp;<br />
+          <% if current_user.member? %>
+            <% if DateTime.current <= deadline %>
+              <% if Team.where(user_id: current_user).count < 2 %>
+                <% team = Team.where(user_id: current_user).last %>
+                <% if no_pick_exists(team) && lost_count(team.id) < 1 && authorize_user_for_pick(team) && DateTime.current <= deadline%>
+                  <center><%= link_to "+ Make Pick", new_team_pick_path(team.id), class: 'btn btn-primary btn-lg' %></center>
+                <% end %>
+              <% end %>
+            <% end %>
+          <% end %>
+        </div>
+        <br />
+        <img src = "/images/green-dot.png"> Paid&nbsp;&nbsp;&nbsp;<img src = "/images/red-dot.png"> Not Paid<br />
+        <table class = 'table table-condensed table-bordered table-striped'>
+          <% set_current_week %>
+          <tr>
+            <th>Team</th>
+            <% for i in 1..set_current_week %>
+              <th><center><%= "Wk #{i}" %></center></th>
+            <% end %>
+          </tr>
+          <tr>
+            <% week_status %>
+            <% @teams.each do |team| %>
+              <td>
+                <% if team.verified %>
+                  <img src = 'images/green-dot.png'>&nbsp;&nbsp;
+                  <strong><%= link_to team.name, team %></strong>
+                <% else %>
+                  <img src = 'images/red-dot.png'>&nbsp;&nbsp;
+                  <strong><%= link_to team.name, team %></strong>&nbsp;&nbsp;
+                <% end %>
+              </td>
+              <% team.picks.order(:nfl_week).each do |pick| %> <!-- Lists all picks for given team -->
+                <!-- allow manager or admin to edit picks up until deadline -->
+                <% if authorize_user_for_pick(team) %>
+                  <% if !NflWeek.find_by_id(pick.nfl_week).has_ended? && DateTime.current <= deadline && DateTime.current < Game.find_by_id(pick.game_id).scheduled_time %>
+                    <td><center><%= link_to pick.nfl_team, edit_pick_path(pick.id)%></center></td>
+                  <% else %>
+                    <% if pick.loss? %>
+                      <td><span style = 'color:red'><center><%= pick.nfl_team %></center></span></td>
+                    <% else %>
+                      <td><center><%= pick.nfl_team %></center></td>
+                    <% end %>
+                  <% end %>
+                <% else %>
+                  <!-- show picks to member user -->
+                  <% if pick.loss? %>
+                    <td><span style = 'color:red'><center><%= pick.nfl_team %></center></span></td>
+                  <% else %>
+                    <td><center><%= pick.nfl_team %></center></td>
+                  <% end %>
+                <% end %>
+              <% end %>
+              <% if DateTime.current - 5.hours <= deadline %> <!-- when leagues model implemented, this will be a variable -->
+                <% if authorize_user_for_pick(team) %>
+                  <% if lost_count(team.id) == 0 && no_pick_exists(team)%><!-- Hard-coded to double-elimination. League options will determine single or double elimination -->
+                    <td><center><%= link_to "+ Make Pick", new_team_pick_path(team.id), class: 'btn btn-primary btn-xs' %></center></td>
+                  <% end %>
+                <% end %>
+              <!-- enter else for if they fail to make a pick after deadline -->
+              <% end %>
+              </tr>
+            <% end %>
+        </table>
+      <% else %>
+        <% if DateTime.current < '2024-09-09 05:00'%>
+          <div style="text-align:center">
+            <br />
+            <img src="images/football-snap.jpg"><br />
+            You don't have any teams yet. <%= link_to '+ Add Team', new_team_path, :class => 'btn btn-primary' %> to get started!
+            <br /><br /><p>You can have as many teams as you like - $10 per team. Every week, you'll make a pick for every team you own.</p>
+            <p>After you create a team, you will be able to see all teams in the league and their picks.</p>
+          </div>
+        <% else %>
+          <br />
+          Sorry, the deadline for joining this league has passed. Teams must be added before the first game of the regular season.
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+  <br /><br />
+  <div class="navbar navbar-default navbar-bottom" style="background:#F2F2F2; border:none; color:black">
+      <p class="navbar-text pull-left">© 2016 - Site built and maintained by Upside Down Studios, LLC</p>
+  </div>
+</div>

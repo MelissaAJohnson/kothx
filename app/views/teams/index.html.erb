@@ -1,0 +1,41 @@
+<div class = 'container'>
+  <h3 style = "display:inline">Teams</h3>&nbsp;&nbsp;
+  <% if set_current_week < 2 %>
+    &nbsp;&nbsp;<%= link_to "+ Add Team", new_team_path %><br /><br />
+  <% end %>
+  <table class = 'table table-condensed table-bordered table-striped'>
+    <tr>
+      <th>Team</th>
+      <% for i in 1..set_current_week %>
+        <th><center><%= "Wk #{i}" %></center></th>
+      <% end %>
+    </tr>
+    <tr>
+      <% @user_teams.each do |team| %>
+        <td>
+          <strong><%= link_to team.name, team %></strong>
+        </td>
+        <% team.picks.order(:nfl_week).each do |pick| %> <!-- Lists all picks for given team -->
+          <%if pick.loss? %>
+              <% if current_user.admin? || current_user.manager? %>
+                <td style="background-color: #f2a1a1"><center><%= link_to pick.nfl_team, edit_pick_path(pick.id)%></center></td>
+              <% else %>
+                <td style="background-color: #f2a1a1"><center><%= pick.nfl_team %></center></td>
+              <% end %>
+          <% else %>
+            <% if current_user.admin? || current_user.manager? %>
+              <td><center><%= link_to pick.nfl_team, edit_pick_path(pick.id)%></center></td>
+            <% else %>
+              <td><center><%= pick.nfl_team %></center></td>
+            <% end %>
+          <% end %>
+        <% end %>
+        <% if DateTime.current <= deadline %>
+          <% if lost_count(team.id) < 2 && no_pick_exists(team.id)%> <!-- Hard-coded to double-elimination. League options will determine single or double elimination -->
+            <td><center><%= link_to "+ Make Pick", new_team_pick_path(team.id), class: 'btn btn-primary btn-xs' %></center></td>
+          <% end %>
+        <% end %>
+        </tr>
+      <% end %>
+  </table>
+</div>

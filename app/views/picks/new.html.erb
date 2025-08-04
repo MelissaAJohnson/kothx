@@ -1,0 +1,45 @@
+<div class = 'container'>
+  <h3>New Pick for <%= Team.where(id: @team.id).last.name %></h3>
+  <h4>NFL Week <%= set_current_week %></h4>
+
+
+  <%= form_for [@team, @pick] do |f| %>
+    <div class = 'form-group'>
+      <div class = 'col-md-10'>
+        <%= f.select(:nfl_team, nfl_teams_for_select, {:prompt => 'Pick Team' }, { :class => 'form-control' }) %>
+        <%= f.hidden_field :nfl_week, { :value => set_current_week } %>
+      </div>
+      <div class = 'col-md-2'>
+        <%= f.submit 'Submit', class: 'btn btn-primary' %>&nbsp;&nbsp;<%= link_to 'Cancel', root_path %>
+      </div>
+    </div>
+  <% end %>
+  <br /><br /><br />
+
+
+  <% Game.where(week: set_current_week)
+         .order('scheduled_time asc')
+         .in_groups_of(6, false)
+         .each do |game_array| %>
+    <div class = 'col-md-4'>
+      <table class = 'table table-condensed table-bordered table-striped'>
+        <tr>
+          <th><center>Home</center></th>
+          <th>Schedule</th>
+          <th><center>Away</center></th>
+        </tr>
+        <% game_array.each do |game| %>
+          <tr>
+            <% t = game.scheduled_time - 5.hours %>
+            <td><center><%= "#{game.home}"%></center></td>
+            <td>
+              <%= "#{t.strftime("%I")}:#{t.strftime("%M")} #{t.strftime("%p")}" %><br />
+              <%= "#{t.strftime("%A")}, #{t.strftime("%B")} #{t.strftime("%d")}" %>
+            </td>
+            <td><center><%= "#{game.away}"%></center></td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content = "text/html; charset=UTF-8" http-equiv="Content-Type" />
+  </head>
+  
+  <body>
+    <%= "#{@team.user.first_name} #{@team.user.last_name} created #{@team.name}" if @team.user %>
+  </body>
+</html>

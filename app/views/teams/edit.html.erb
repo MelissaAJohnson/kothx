@@ -1,0 +1,26 @@
+<div class = 'container'>
+  <h3>Edit <%= @team.name %></h3>
+
+  <%= form_for @team do |f| %>
+    <% if @team.errors.any? %>
+      <div class = "alert alert-danger alert-dismissible" >
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <% @team.errors.full_messages.each do |message| %>
+          <%= message %>
+        <% end %>
+      </div>
+    <% end %>
+
+    <div class = 'form-group'>
+      <% if current_user.manager? || current_user.admin? %>
+        <%= f.check_box :verified %>&nbsp;&nbsp;<%= f.label "Verified" %>
+        <br /><br />
+      <% end %>
+      <%= f.text_field :name, class: 'form-control', placeholder: "Team Name" %>
+      <br />
+      <%= f.submit "Save", class: 'btn btn-primary' %>&nbsp;&nbsp;<%= link_to 'Cancel', :back %>
+    </div>
+  <% end %>
+</div>

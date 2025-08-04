@@ -1,0 +1,31 @@
+
+<div class = 'container'>
+  <% if !user_signed_in? %>
+    <%= link_to 'King of the Hill', root_url, style: "font-size: 250%; color:black; text-decoration: none;" %>
+    <div class = 'pull-right', style = 'text-align: top'>
+      <%= link_to 'Log in', root_url, :class => 'navbar-link' %>&nbsp;&nbsp;| &nbsp;&nbsp;
+      <%= link_to 'Sign Up', new_user_registration_path, :class => 'btn btn-primary' %>
+    </div>
+    <hr />
+  <% end %>
+
+  <div id = 'rules'>
+    <h4>Game Start</h4>
+    <p>Game starts in September. You can add and delete teams until the day of the first season game.</p>
+    <h4>How to Play</h4>
+    <p>Pick a team that you think will win every week. You can only pick a team once in a season. So, if you pick the Minnesota Vikings in week 1, you can not pick them again in the season.</p><p>This is a <strong>single elmination</strong> league. This means, one loss and you are out.</p>
+    <h4>What happens in a tie?</h4>
+    <p>The team you pick must win. Therefore, a tie counts as a loss.</p>
+    <h4>What happens if all remaining teams lose the same week?</h4>
+    <p> If all the remaining teams lose or tie the same week, the contest goes on with those remaining teams but the players lose that team picked that week.</p>
+    <h4>How do I make a Pick?</h4>
+    <p>After you create a team, you can make picks. To make a pick, click "Make Pick" to the right of your team name. You can also contact Randy Zimmer directly.</p>
+	<p><img src="images/making_a_pick.gif"></p>
+    <h4>Pick Deadline</h4>
+    <p>ALL PICKS WILL BE LOCKED IN AT 11:59 PM SATURDAY NIGHT. If you make a pick earlier than the deadline, you can change it before the lock period.  NO PICK IN BY SATURDAY NIGHT - your pick will automatically default to the next team in alphabetical order. For example, if you picked Arizona in week 2 and did not make a pick by the deadline for week 3, your week 3 pick would default to Atlanta.</p>
+    <h4>Winning the Game</h4>
+    <p>This contest is over when there is one player left or the regular season ends. NO PLAYOFFS!!! Winner takes all. In the event there is a tie the pot is split.</p>
+	<h4>How do I get help?</h4>
+	<p>Use this <a href = "mailto:support@pigskinkoth.com">link</a> to contact support.</p><br /><br />
+  </div>
+</div>
