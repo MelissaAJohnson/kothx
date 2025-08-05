@@ -3,7 +3,7 @@
   <head>
     <title>KOTH</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+    <link rel="stylesheet" href="<%= asset_path 'application.css' %>">
     <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
     <%= csrf_meta_tags %>
 
@@ -23,6 +23,10 @@
       ga('send', 'pageview');
     </script>
     <!-- End of Google Analytics tracking code -->
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+
+
 
   </head>
   <body>

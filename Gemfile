@@ -69,3 +69,9 @@ end
 gem "devise"
 gem 'orm_adapter', '~> 0.5'
 gem 'audited'
+
+gem "jsbundling-rails", "~> 1.3"
+
+gem "cssbundling-rails", "~> 1.4"
+
+gem "sassc"
