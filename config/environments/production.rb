@@ -101,7 +101,7 @@ Rails.application.configure do
     address:              'smtp.sendgrid.net',
     port:                 587,
     domain:               'yourdomain.com',
-    user_name:            ENV['SENDGRID_USERNAME'], # or 'apikey'
+    user_name:            'apikey', # or 'apikey'
     password:             ENV['SENDGRID_API_KEY'],
     authentication:       :plain,
     enable_starttls_auto: true
